@@ -1,0 +1,108 @@
+
+:toc:
+
+= jeets-generate-openapi-traccar
+
+For the JeeTS-Web repository the generated client represents
+the initial source component to communicate with a running Traccar instance.
+The generation implicitly transforms the Swagger 2.0 format
+to its successor the 
+link:https://swagger.io/resources/open-api/[OpenAPI Specification]: 
+_"The World Standard for RESTful APIs_".
+
+The Traccar GTS v4.10 comes with a 
+link:https://www.traccar.org/traccar-api/[REST API]
+defined in a swagger.json file.
+The REST API allows full access the a running Traccar GTS instance
+from any client software, including authorization.
+It can be looked at as a security wrapper for database access
+with hidden prepared SQL statements and
+without revealing the database URI.
+
+
+== Description
+
+This project is simply triggering the 
+link:https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator-maven-plugin[openapi-generator-maven-plugin]
+to automatically generate the `jeets-openapi-traccar` artifact  
+representing the *Open API Java Client for Traccar*
+with the link:https://openapi-generator.tech[OpenAPI Generator].
+
+
+== Dedicated Life Cycle
+
+Since this project is only used to generate a sub project with the plugin
+[source,text]
+-----------------
+--- openapi-generator-maven-plugin:4.3.1:generate (default) @ jeets-generate-openapi-traccar ---
+-----------------
+Therefore the project has no source nor tests and it makes no sense
+to run the consequent Maven Phases which are explicitly marked with 
+`<phase>none</phase>` in the `pom.xml` file.
+
+Another thing to note about the dedicated Maven Life Cycle is that
+the cleaning phase is also configured to 
+[source,text]
+-----------------
+<excludeDefaultDirectories>true</excludeDefaultDirectories>
+-----------------
+This is important for the repositories complete lifecycle which
+already defines the generated project as a module with a relative path
+[source,text]
+-----------------
+<module>.\jeets-generate-openapi-traccar\target\generated-sources\openapi</module>
+-----------------
+This module has to exist with a valid pom file 
+in order to start any Maven process for the complete repo.
+
+
+=== Development Cycle
+
+Note that the complete `openapi sub project` is checked into git
+and pre-existing at
+[source,text]
+-----------------
+jeets-generate-openapi-traccar\target\generated-sources\openapi
+-----------------
+including the _uncleaned_ `\target` 
+folder as described as security measure above.
+If you feel insecure you might as well comment the module
+[source,text]
+-----------------
+<module>jeets-generate-openapi-traccar</module>
+-----------------
+in the main pom, since the sources of the subproject don't need to be generated
+and it will be part of the lifecycle nevertheless.
+
+As a developer you might want to configure the OpenAPI Generator 
+and re-generate the code for the Java Client.
+You can do this by manually cleaning, i.e. deleting the `target` folder 
+in the `jeets-generate-openapi-traccar` project,
+`cd` into the project and run `mvn compile`.
+This will trigger the generation of a new project and
+afterwards the sub project exists with pom file 
+to allow the complete repo run.
+
+Note that the sub project version and Traccar URL is supplied from the swagger.json file
+[source,text]
+-----------------
+    "swagger": "2.0",
+    "info": {
+        "version": "4.10",       <= jeets-openapi-traccar CLIENT VERSION
+        "title": "traccar"
+    },
+    "host": "traccar.virtex.de",
+    "basePath": "/api",
+       ...
+-----------------
+and results in 
+[source,text]
+-----------------
+     <groupId>org.jeets</groupId>
+     <artifactId>jeets-openapi-traccar</artifactId>
+     <version>4.10</version>
+-----------------
+and this is the actual artifact you need to include in your client software.
+
+
+

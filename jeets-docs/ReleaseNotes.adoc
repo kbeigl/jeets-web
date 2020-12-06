@@ -1,0 +1,17 @@
+
+:toc:
+
+= Release Notes - JeeTS Web Repository
+
+=== v1.0-beta - December 2020
+
+initial release: 
+
+ * `jeets-generate-openapi-traccar` generates Open API client 
+   `jeets-openapi-traccar` from Traccar swagger file
+ 
+ * import Open API client `jeets-openapi-traccar` 
+   into Spring MVC Component `jeets-web-spring-traccar`
+ 
+ * provide role based `TraccarModel.java`
+

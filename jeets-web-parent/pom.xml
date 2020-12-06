@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+    Copyright 2020 The Java EE Tracking System - JeeTS
+    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
+    
+    The JEE Tracking System licenses this file to you 
+    under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    	http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.jeets</groupId>
+		<artifactId>jeets-web</artifactId>
+		<version>1.0-beta</version>
+	</parent>
+	
+	<artifactId>jeets-web-parent</artifactId>
+	<packaging>pom</packaging>
+
+	<name>--- JeeTS-Web - Global Definitions          ---</name>
+	<description>
+		Parent POM for common definitions and constants for all JeeTS sources.
+	</description>
+	<url>jeets.org/</url>
+
+	<properties>
+        <os-maven-plugin-version>1.6.0</os-maven-plugin-version>
+		<!-- project settings (complete repo?) -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- rterp.wordpress.com/2012/03/16/stamping-version-number-and-build-time-in-properties-file-with-maven/ -->
+		<jeets.compile.time>${maven.build.timestamp}</jeets.compile.time>
+		<maven.build.timestamp.format>dd.MM.yyyy HH:mm:ss</maven.build.timestamp.format>
+		<jeets.properties.file>jeets-web.properties</jeets.properties.file>
+
+		<!-- maven settings -->
+		<!-- <jdk.version>1.8</jdk.version> -->
+		<!-- <java.version>1.8</java.version> -->
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+
+        <!-- maven plugins -->
+        <maven-compiler-plugin-version>3.8.0</maven-compiler-plugin-version>
+	    <maven-surefire-plugin-version>2.22.2</maven-surefire-plugin-version>
+	    <maven-failsafe-plugin-version>2.22.2</maven-failsafe-plugin-version>
+
+		<process-exec-maven-plugin-version>0.9</process-exec-maven-plugin-version>
+        <directory-maven-plugin-version>0.3.1</directory-maven-plugin-version>
+		
+	    <maven-source-plugin-version>3.0.1</maven-source-plugin-version>
+	    <!-- add maven-javadoc-plugin ! -->
+        <maven-assembly-plugin-version>3.1.0</maven-assembly-plugin-version>
+        <!-- latest? defaults to: 2.6-->
+        <maven-resources-plugin-version>3.1.0</maven-resources-plugin-version>
+		<build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version>
+        
+        <lifecycle-mapping-version>1.0.0</lifecycle-mapping-version>
+
+		<exec-maven-plugin-version>1.6.0</exec-maven-plugin-version>
+
+	    <!-- TODO -->
+<!--    antrun - can temporarily be used to echo Maven's internal variables and values
+		<maven-antrun-plugin-version>1.8</maven-antrun-plugin-version>
+		<version-download-maven-plugin>1.3.0</version-download-maven-plugin>
+        <version-maven-dependency-plugin>2.10</version-maven-dependency-plugin>
+        <version-maven-release-plugin>2.5</version-maven-release-plugin>
+        <version-maven-war-plugin>3.0.0</version-maven-war-plugin>  -->
+	</properties>
+	
+	<build>
+		<!-- Operating system and CPU architecture detection extension -->
+		<extensions>
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>${os-maven-plugin-version}</version>
+			</extension>
+		</extensions>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire-plugin-version}</version>
+				    <configuration>
+				        <skipTests>${skip.unit.tests}</skipTests>
+						<!-- this is important to terminate target\surefire\surefirebooterXXX.jar 
+							if test is cancelled with <CTRL> + <C>. Otherwise port remains blocked!! -->
+						<shutdown>kill</shutdown>
+				    </configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin-version}</version>
+	                <configuration>
+	                    <source>${maven.compiler.source}</source>
+	                    <target>${maven.compiler.target}</target>
+	                    <!-- docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html#nonstandard -->
+	                    <!-- <compilerArgument>-Xlint:unchecked</compilerArgument>
+						<maxmem>512M</maxmem>
+						<showDeprecation>true</showDeprecation> -->
+	                </configuration>
+				</plugin>
+				<plugin>
+				<!-- invoke with mvn source:jar or avoid specifying the source plugin in 
+					each of the child projects. For this you need to put it to build -> plugins 
+					section of parent pom, not build -> pluginManagement. – Andrew Logvinov -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${maven-source-plugin-version}</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+					<!-- <inherited>true</inherited> ?? -->
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${maven-assembly-plugin-version}</version>
+					<configuration>
+						<descriptorRefs>
+							<descriptorRef>jar-with-dependencies</descriptorRef>
+						</descriptorRefs>
+					</configuration>
+					<executions>
+						<execution>
+							<!-- this is used for inheritance merges -->
+							<id>make-assembly</id>
+                            <!-- difference? <id>assemble-all</id> -->
+							<!-- bind to the packaging phase -->
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+				<!-- This plugin is meant to be run as part of the standard build lifecycle, 
+					to help establish locations for files in multi module builds, 
+					where the directory structure referenced is stable and will always be intact. 
+					Inconsistencies can cause false positives or false negatives! -->
+					<groupId>org.commonjava.maven.plugins</groupId>
+					<artifactId>directory-maven-plugin</artifactId>
+					<version>${directory-maven-plugin-version}</version>
+					<executions>
+						<execution>
+							<id>directories</id>
+							<goals>
+								<goal>highest-basedir</goal>
+							</goals>
+							<phase>initialize</phase>
+							<!-- <id>directories</id> -->
+							<configuration>
+								<!-- root for all paths ! -->
+								<property>jeets.repo.directory</property>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>properties-maven-plugin</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<files>
+							<!-- Properties are read from a single property file 
+							      AND hardcode in the pom files like this: -->
+							<file>${jeets.repo.directory}/${jeets.properties.file}</file>
+						</files>
+					</configuration>
+					<executions>
+						<!-- Load properties for the default lifecycle -->
+						<execution>
+							<id>default-lifecycle-properties</id>
+							<phase>initialize</phase>
+							<goals>
+								<goal>read-project-properties</goal>
+							</goals>
+						</execution>
+						<!-- Load properties for the clean lifecycle 
+						<execution> <id>clean-lifecycle-properties</id> 
+							<phase>pre-clean</phase> <goals> <goal>read-project-properties</goal> </goals> 
+						</execution> -->
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${maven-resources-plugin-version}</version>
+					<configuration>
+						<!-- apply ${project.build.sourceEncoding}? -->
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>${lifecycle-mapping-version}</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<!-- this is only used in pu ! move down ? simplify here -->
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>sql-maven-plugin</artifactId>
+										<versionRange>${sql-maven-plugin-version}</versionRange>
+										<goals>
+											<goal>execute</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.commonjava.maven.plugins</groupId>
+										<artifactId>directory-maven-plugin</artifactId>
+										<versionRange>${directory-maven-plugin-version}</versionRange>
+										<goals>
+											<goal>highest-basedir</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute>
+											<runOnIncremental>true</runOnIncremental>
+											<runOnConfiguration>true</runOnConfiguration>
+										</execute>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+<!-- 			
+				<plugin>  ** used in jeets-protocols-traccar **
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${version-maven-dependency-plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>${version-maven-release-plugin}</version>
+					<configuration>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<tagNameFormat>@{project.version}</tagNameFormat>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${version-maven-war-plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>${version-exec-maven-plugin}</version>
+				</plugin> 
+                <plugin>  ** used in jeets-protocols-traccar **
+	                <artifactId>maven-enforcer-plugin</artifactId>
+	                <version>1.4.1</version>
+ -->
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>

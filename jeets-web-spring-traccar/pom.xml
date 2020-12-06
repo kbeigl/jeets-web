@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.jeets</groupId>
+		<artifactId>jeets-web-parent</artifactId>
+		<version>1.0-beta</version>
+		<relativePath>../jeets-web-parent</relativePath>
+	</parent>
+
+    <artifactId>jeets-web-spring-traccar</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-openapi-traccar</artifactId>
+			<version>4.10</version>
+		</dependency>
+
+	<!-- spring-security-core contains authentication and access control functionality 
+		and is is mandatory to include for all projects using Spring Security.
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		security-web contains spring-security-core: --> 
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-web</artifactId>
+		</dependency>
+		<!-- Spring Method Security-->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-config</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+    </dependencies>
+
+	<!-- <build> ... -->
+
+</project>

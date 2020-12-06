@@ -1,0 +1,143 @@
+[[jeets-toc]]
+
+:toc:
+
+// IF YOU SEE PLAIN ASCII IN YOUR BROWSER YOU CAN INSTALL 
+// THE BROWSER EXTENSION https://asciidoctor.org/
+// TO RENDER adoc FILES AND CLICK THE DOCUMENT LINKS.
+// (works fine in Firefox, not so fine in Chromecast)
+
+
+= JeeTS Web Inline Documentation
+
+The JeeTS Software and the JeeTS Web Software are enabling the Traccar GTS
+for the Spring Framework, which is the modern de facto standard
+to develop applications in Java
+and, if needed, according to the Java EE specification (Jakarta). 
+
+The JeeTS Web Software is a toolkit to rapidly develop individual Frontends
+for the Traccar Tracking System. +
+Some customers are using the original Traccar Web Frontend to manage users and devices
+but also have internal requirements for complex calculation of reports.
+With this toolkit you can create any web page to display any Traccar entities
+and process complicated algorithms with their values.
+
+
+== Architecture
+
+The JeeTS Web has emerged from customer requests for individual reporting. 
+It turned out that it makes more sense to create a basic Model with a safe login
+to the Traccar Backend via Traccar REST API than modifying Traccar Web.
+By using REST we automatically get role based access to permitted objects only
+- managed in the original frontend.
+
+The core of the JeeTS Web is a Spring _MVC_ Component to supply the original
+*Traccar Model* with _Spring's Role Based Security_. Easy to use with 
+_Spring Boot Starters_ to develop individual *Controllers and Views*.
+
+The core building process goes through the following steps:
+
+
+== jeets-client-api
+
+This folder is reserved for the client server communication 
+and does not explicitly depend on Spring.
+
+
+=== jeets-generate-openapi-traccar
+
+The Traccar GTS version 4.10 comes with a 
+link:https://www.traccar.org/traccar-api/[REST API]
+defined in a swagger.json file.
+The REST API allows full access the a running Traccar GTS instance
+from any client software, including authorization.
+[source,xml]
+----
+    "swagger": "2.0",
+    "info": {
+        "version": "4.10",
+        "title": "traccar"
+    }, ...
+----
+
+Since Swagger is slowly outdated the JeeTS Web begins with the conversion
+from Swagger to OpenAPI.
+The project generates the `jeets-openapi-traccar` artifact  
+representing the *Open API Java Client for Traccar*.
+
+link:../jeets-client-api/jeets-generate-openapi-traccar/README.adoc[go to project]
+
+Note that Traccar version 4.11 is supplying the REST API with an openapi file:
+[source,xml]
+----
+    "openapi": "3.0.1",
+      "info": {
+        "title": "Traccar",
+        "version": "4.11",
+    }, ...
+----
+We will optimize the conversion process for version 4.11 with the next release.
+
+
+==== jeets-openapi-traccar
+
+After generating the Open API Client for Traccar v4.10
+you can add it to any project you want:
+```xml
+<dependency>
+  <groupId>org.jeets</groupId>
+  <artifactId>jeets-openapi-traccar</artifactId>
+  <version>4.10</version>
+</dependency>
+```
+Then you can use the client to connect to your Traccar Server,
+authenticate and send commands according to the permissions.
+The generated README.md file provides an example of simple client code
+to pickup System Entities from Traccar.
+
+link:../jeets-client-api/jeets-generate-openapi-traccar/target/generated-sources/openapi/README.md[go to project]
+
+
+== jeets-web-spring-traccar
+
+This project forms the base of any Spring (Boot Starter) application.
+It basically depends on the `jeets-openapi-traccar` artifact,
+adds *Spring Security* to create a Spring MVC Component 
+to build your Frontend with.
+
+The idea is to wrap the *Traccar Open API Client* into role based
+Spring Security and provide an easy to use Traccar Model.
+So the project is actually a Spring-*Traccar-Model* Component
+and you can easily create your own *Controllers* and *Views*
+for your own purposes.
+
+We will publish an initial implementation of proprietary frontend views 
+with custom Controllers to demonstrate how easy it is to build 
+your Traccar appearance. Until then the version is marked with `-beta`.
+
+Stay tuned!
+
+link:../jeets-web-spring-traccar/readme.adoc[go to project]
+
+
+// NEXT RELEASE
+
+// == jeets-web-vaadin
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

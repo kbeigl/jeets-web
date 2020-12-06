@@ -1,0 +1,29 @@
+[[web-spring-traccar]]
+
+:toc:
+
+
+= JeeTS Web Spring Traccar
+
+This project forms the base of any Spring (Boot Starter) application.
+The idea is to wrap the *Traccar Open API Client* into role based
+Spring Security and provide an easy to use Traccar Model.
+So the project is actually a Spring-*Traccar-Model* Component
+and you can easily create your own *Controllers* and *Views*
+for your own purposes.
+
+
+// == Architecture
+
+// TODO 
+
+// The core of the JeeTS Web is a Spring _MVC_ Component 
+
+// to supply the original *Traccar Model* 
+
+// with _Spring's Role Based Security_. 
+
+// Easy to use with _Spring Boot Starters_ 
+
+// to develop individual *Controllers and Views*.
+

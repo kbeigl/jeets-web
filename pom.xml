@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+    Copyright 2020 The Java EE Tracking System - JeeTS
+    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
+    
+    The JEE Tracking System licenses this file to you 
+    under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    	http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.jeets</groupId>
+	<artifactId>jeets-web</artifactId>
+	<!-- main JeeTS Web repo version -->
+	<version>1.0-beta</version>
+	<packaging>pom</packaging>
+
+	<!-- global parent to benefit from dependency management AND plugin management -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.2.RELEASE</version>
+    </parent>
+    
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+	<name>=== JeeTS-Web - Java EE Tracking Frontend   ===</name>
+	<description>
+		JeeTS Web Super POM to compile, test and build ALL JeeTS Web sources with dependencies.
+	</description>
+	<url>jeets.org</url>
+
+	<developers>
+		<developer>
+			<name>Kristof Beiglböck - JeeTS</name>
+			<email>kbeigl@jeets.org</email>
+			<url>jeets.org</url>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+		</license>
+	</licenses>
+
+	<modules>
+		<module>jeets-web-parent</module>
+		<module>jeets-client-api</module>
+		<module>jeets-web-spring-traccar</module>
+		<!-- <module>jeets-vaadin</module> -->
+	 </modules>
+
+	<!-- 
+	<build>
+	    <plugins>
+	        <plugin>
+	            <groupId>org.springframework.boot</groupId>
+	            <artifactId>spring-boot-maven-plugin</artifactId>
+	        </plugin>
+	    </plugins>
+	</build>
+	 -->
+
+</project>
