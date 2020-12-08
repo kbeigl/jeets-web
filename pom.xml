@@ -61,7 +61,7 @@
 		<module>jeets-web-parent</module>
 		<module>jeets-client-api</module>
 		<module>jeets-web-spring-traccar</module>
-		<!-- <module>jeets-vaadin</module> -->
+		<module>jeets-web-vaadin</module>
 	 </modules>
 
 	<!-- 
