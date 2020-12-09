@@ -2,7 +2,8 @@ package org.jeets.web.vaadin.ui.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -17,37 +18,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DashboardView extends VerticalLayout {
 
 	private static final long serialVersionUID = 1L;
-//	@Autowire here > available after construction !!
 	private TraccarModel traccarModel;
 
-	@Autowired // for construction
-	public DashboardView( TraccarModel model) {
-//		move code to @Postconstruct ?
+//	TODO: i18n for ALL strings
+
+	@Autowired
+	public DashboardView(TraccarModel model) {
 		traccarModel = model;
-		addClassName("dashboard-view");
+//		addClassName("dashboard-view");
 //		setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-		add(createUserLabel());
-		add(createMyDevicesButton());
-		if (TraccarAuthentication.isAdminOrManager())
-			add(createAllDevicesButton());
+		add(createDeviceButtons());
 	}
 
-	//	TODO create label only once per session and re-use in views
-//	OR create all infos in the Model with ModelAttributes !!
-	private Component createUserLabel() {
-//		TODO set user in @Model !?
-		String userInfos = traccarModel.getRoleString() + " " 
-				+ TraccarAuthentication.getTraccarUser().getName();
-		H3 userLabel = new H3(userInfos);
-		userLabel.addClassName("contact-stats");
-		return userLabel;
+	private Component createDeviceButtons() {
+		HorizontalLayout header = new HorizontalLayout(createMyDevicesButton());
+		header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+		header.setWidth("100%");
+		if (TraccarAuthentication.isAdminOrManager())
+			header.add(createAllDevicesButton());
+		return header;
 	}
 
 	/**
 	 * Button to retrieve all devices. Can only be applied by Managers and Admins.
 	 */
-	private Component createAllDevicesButton() {
+	private Button createAllDevicesButton() {
 		Button button = new Button("Alle Geräte");
+		button.setWidth("150px");
 		button.addClickListener(clickEvent -> getAllDevices());
 		return button;
 	}
@@ -55,8 +52,9 @@ public class DashboardView extends VerticalLayout {
 	/**
 	 * Button to retrieve all devices of the logged in user.
 	 */
-	private Component createMyDevicesButton() {
+	private Button createMyDevicesButton() {
 		Button button = new Button("Meine Geräte");
+		button.setWidth("150px");
 		button.addClickListener(clickEvent -> getDevices());
 		return button;
 	}
@@ -65,7 +63,7 @@ public class DashboardView extends VerticalLayout {
 	 * Retrieve all devices of the logged in user.
 	 */
 	private Object getDevices() {
-		traccarModel.setUserDevices();
+		traccarModel.setUserDevices(); // !!
 		System.out.println("Found " + traccarModel.getDevices().size() + " user Devices");
 		return null;
 	}

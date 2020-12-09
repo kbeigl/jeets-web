@@ -120,10 +120,22 @@ Stay tuned!
 link:../jeets-web-spring-traccar/readme.adoc[go to project]
 
 
-// NEXT RELEASE
-
-// == jeets-web-vaadin
+== jeets-web-vaadin
  
+This project provides a rich skeleton to create your own Traccar Frontend
+and demonstrates how to work with the `jeets-web-spring-traccar` project 
+and it's built in *Traccar Open API Client* 
+to create your own *Controllers* and *Views*.
+
+We have chosen the link:https://vaadin.com/[vaadin framework]
+as the _Jee_ TS was created for _Java_ Developers and 
+vaadin is "An open platform for building web apps in _Java_".
+Java and Web Developers require different skills and roles 
+usually filled by different people.
+Vaadin fills this gap and links the JavaSkript stuff for you in the release process.
+
+
+link:../jeets-web-vaadin/readme.adoc[go to project]
 
 
 

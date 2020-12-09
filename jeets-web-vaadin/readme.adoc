@@ -1,0 +1,101 @@
+[[web-vaadin]]
+
+:toc:
+
+
+= JeeTS Web Vaadin
+
+This project provides a skeleton to create your own Traccar Frontend - rapidly.
+It implies the `jeets-web-spring-traccar` project 
+which controls the embedded Tomcat Servlet Engine
+and has a built in *Open API Client for Traccar*.
+
+If you don't know the Vaadin Framework yet you should visit the 
+link:https://vaadin.com/[vaadin website] 
+full of material to get started, learn and build.
+You might want to download their  
+link:https://vaadin.com/start[starter application]:
+*Starting point for Vaadin 14 applications with Spring Boot*.
+If you install this starter project parallel to this project
+you should quickly get oriented and start coding.
+
+This document only lists the major mile stones from this 
+link:https://vaadin.com/learn/tutorials/modern-web-apps-with-spring-boot-and-vaadin[Vaadin Tutorial]: +
+"This guide is a practical introduction to web application development with Spring Boot and Vaadin.
+It covers the entire development process, from setup to deployment, following a step-by-step approach. 
+The content is suitable for anyone familiar with Java who wants to build a web application."
+
+WARNING: Please note that Vaadin provides free Open Source and commercial components! +
+If you decide to use the commercial products you need to get a license before going live. +
+The JeeTS Web only uses the free components unless dedicated customers ask for more.
+
+
+== Install Node.js
+
+We expect you to be familiar with JeeTS and have followed the instructions
+to install a Java Developer Kit, the Maven Build Tool, Git Version Control,
+that you have run a `mvn clean install` over this repository
+and maybe have already imported the projects into your IDE.
+This process works for the regular JeeTS repository, but in case of the JeeTS Web
+you will run into a build problem without the 
+link:https://nodejs.org[Front-end build tool Node.js],
+a JavaScript run-time environment, on your OS.
+Vaadin uses Node internally to build an optimized version of your app.
+
+Node Installation steps:
+
+ * Go to the link:https://nodejs.org/en/download/[Node.js download page]
+
+ * Download and run the (Windows) Installer for your system +
+   (other operating systems are covered in the Vaadin Tutorial pdf)
+ 
+ * Follow the prompts in the wizard.
+ 
+ * It is highly recommended to install the 'live reload' in your browser
+   as described in the same document. + 
+   This provides the perfect development environment 
+   reflecting every change immediately in your browser.
+
+Now the `mvn install` process should run smoothly, 
+should see the `npm install` in the logs
+and the repository should compile with `BUILD SUCCESS`.
+
+
+== Login to a Vaadin app with Spring Security
+
+In the 
+link:https://vaadin.com/learn/tutorials/modern-web-apps-with-spring-boot-and-vaadin[Vaadin Tutorial]
+you should go through the chapter:
+*Adding a login screen to a Vaadin app with Spring Security*
+to identify the classes for Vaadin with Spring Security
+in the package `org.jeets.web.vaadin.security`.
+With this security package, the `LoginView` and the main `Application` class
+the preparations are done and you can proceed to the chapter
+*Vaadin basics: building UIs with components and layouts*.
+
+
+== Main Layout and Views
+
+The Tutorial chapter *Navigating between views in Vaadin* describes the `MainLayout`
+and `*View` class mechanisms of user navigation in the browser.
+You will learn how to define paths in vaadin with the `@Route` annotation,
+one of the differences to the methods of Spring MVC.
+
+
+
+== Role Secured TraccarModel
+
+Now you need a running Traccar instance .. use traccar.demo#.org to register user (and manager?)
+
+Note that the `Application` class is placed in the top level package `org.jeets.web`
+in order to automatically scan the sub packages from the `jeets-web-spring-traccar` project.
+
+Evaluate against / replaces? @Model with ModelAttributes
+
+
+== Reports
+
+
+== Map !!
+
+
