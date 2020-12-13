@@ -10,7 +10,7 @@ import org.openapitools.client.ApiException;
 import org.openapitools.client.api.DefaultApi;
 import org.openapitools.client.model.Device;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -26,17 +26,16 @@ import org.springframework.web.context.annotation.SessionScope;
  * created via Authentication and lives through a session life cycle.
  */
 // big TODO: integrate Traccar ERM in OpenAPI client and rewrite with ORM navigation
-// apply @Service or other specialized Components ?
-@Component
-//@Controller // @Service undecided
+@Service
 @SessionScope
 public class TraccarModel {
 
-//	check SpringMVC concepts: ModelAndView = Model, View, ModelAttributes etc.
+//	apply SpringMVC concepts: Model, View, ModelAndView, ModelAttributes etc. ?
 
 	/**
 	 * Traccar API can not be accessed externally and was created with an
-	 * authenticated API, an authorized User and an initiated session.
+	 * authenticated API, an authorized User and an initiated session. During the
+	 * session the API is accessed analog to a repository.
 	 */
 	private DefaultApi traccarApi;
 	
@@ -52,7 +51,6 @@ public class TraccarModel {
 	 */
 	@PostConstruct
 	private void authenticate() {
-		System.out.println("@PostConstruct TraccarModel ...");
 		if (TraccarAuthentication.getAuthentication().isAuthenticated()) {
 //			The Traccar API must be created at login time and must have been
 //			attached to the Authentication before it can be retrieved here.
@@ -71,15 +69,15 @@ public class TraccarModel {
 
 	/**
 	 * return one readable role string for frontend
-	 * TODO i18n
 	 */
+	// TODO move strings out of Model and add i18n externally
 	public String getRoleString() {
 		if (TraccarAuthentication.isAdmin())
 			return "Administrator";
 		else if (TraccarAuthentication.isManager())
 			return "Manager";
 		else if (TraccarAuthentication.isUser())
-			return "Benutzer";
+			return "User";
 		else 
 			return null; // add guestUser
 	}
@@ -159,7 +157,7 @@ public class TraccarModel {
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
+//          e.printStackTrace();
 		}
 	}
 
@@ -168,14 +166,14 @@ public class TraccarModel {
 //	2020-11-27 18:26:53.341 ERROR 10500 --- [nio-8080-exec-7] com.VAADIN.flow.server.DefaultErrorHandler
 //	org.springframework.security.access.AccessDeniedException: Zugriff verweigert
 //	TODO apply @PreAuthorize instead of @PostAuthorize (at dev time to println API Exception)
-	public List<Device> setAllDevices() {
+	public void setAllDevices() {
 //		only retrieve ALL devices once per session (?)
 //		if (devices != null && !devices.isEmpty())
 //			return devices;
 		System.out.println("setAllDevices");
 		try {
 //			ALL - Can only be used by AdminOrManagers to fetch all entities (optional)
-			return traccarApi.devicesGet(true,null,null,null);
+			devices = traccarApi.devicesGet(true,null,null,null);
 
 		} catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi");
@@ -187,15 +185,13 @@ public class TraccarModel {
             
 //          in order to supply developer infos at dev time (?)
 //          throw new UnauthorizedException();
-            
 		}
-		return null;
 	}
 	
-//	doesn't work
+//	TODO
 	@ExceptionHandler(AccessDeniedException.class)
 	public void handleAccessDeniedException(Exception ex){
-	    System.err.println("caught AccessDeniedException");
+	    System.err.println("handle AccessDeniedException ...");
 	}
 
 }

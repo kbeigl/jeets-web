@@ -60,6 +60,11 @@ Now the `mvn install` process should run smoothly,
 should see the `npm install` in the logs
 and the repository should compile with `BUILD SUCCESS`.
 
+mvn spring-boot:run can require two runs! 
+
+javax.servlet.ServletException: com.vaadin.flow.server.ServiceException: com.vaadin.flow.server.BootstrapException: Unable to read webpack stats file.
+	com.vaadin.flow.server.VaadinServlet.service(VaadinServlet.java:249)
+
 
 == Login to a Vaadin app with Spring Security
 

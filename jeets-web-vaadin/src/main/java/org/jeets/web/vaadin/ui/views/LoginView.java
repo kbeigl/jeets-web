@@ -12,8 +12,7 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Anmeldung | Traccar Virtex")
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
-//	see vaadin.com/components/vaadin-login for i18n etc.
-//	    vaadin.com/components/vaadin-login/java-examples
+//	see vaadin.com/components/vaadin-login/java-examples for i18n etc.
 	private LoginForm login = new LoginForm();
 
 	public LoginView() {
@@ -23,8 +22,6 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 		setJustifyContentMode(JustifyContentMode.CENTER);
 
 		login.setAction("login");
-//		this doesn't work with TraccarAuthProvider timing!
-//		login.addLoginListener(e -> { });
 		
 		add(new H1("jeets.web.traccar v4.10"), login); // getVersion
 	}

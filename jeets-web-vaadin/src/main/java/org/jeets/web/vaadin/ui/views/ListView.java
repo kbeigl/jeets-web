@@ -5,7 +5,6 @@ import java.time.Month;
 
 import org.jeets.web.spring.traccar.TraccarModel;
 import org.jeets.web.vaadin.ui.MainLayout;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.html.Span;
@@ -31,52 +30,47 @@ import com.vaadin.flow.router.Route;
 //        enableInstallPrompt = false)
 //@CssImport("./styles/shared-styles.css")
 @Route(value="list", layout = MainLayout.class)
-// analog to Spring @Controller @RequestMapping("/")
-@PageTitle("AZ Modul | Traccar Virtex")
+@PageTitle("Traccar Selections | JeeTS Web")
 public class ListView extends VerticalLayout {
 
 	private static final long serialVersionUID = 1L;
-	@Autowired
+
 	private TraccarModel traccarModel;
 	private DateTimePicker fromDate = new DateTimePicker("fromDate");
 	private DateTimePicker toDate = new DateTimePicker("toDate");
 
-	/**
-     * The main window of the application as Vaadin view.
-     * <p>
-     * Build the initial UI state for the user accessing the application.
-     */
-	public ListView() {
-//		public ListView(@Autowired TraccarModel model) {
-//		traccarModel = model;
+	public ListView(TraccarModel model) {
+			traccarModel = model;
 
-		Button button = new Button("Arbeitszeiten berechnen");
-		button.addClickListener(clickEvent -> calculateWorkingTimes());
-//		button.addClickListener(clickEvent -> this::calculateWorkingTimes);
+//		TODO create ParameterBar
+		
+		Button button = new Button("calculate");
+		button.addClickListener(clickEvent -> calculateWithParameters());
 
 //		LocalDateTime now = LocalDateTime.now();
-//		toDate.setValue(now);
-
 //		Day and duration for initial analysis
-		fromDate.setValue(LocalDateTime.of(2020, Month.OCTOBER, 12, 9, 7));
-		toDate.setValue(LocalDateTime.of(2020, Month.OCTOBER, 12, 18, 40));
+		fromDate.setValue(LocalDateTime.of(2020, Month.OCTOBER, 12,  9,  7));
+		  toDate.setValue(LocalDateTime.of(2020, Month.OCTOBER, 12, 18, 40));
+//		toDate.setValue(now);
 
 		VerticalLayout layout = new VerticalLayout(fromDate, toDate, button);
 //		layout.setDefaultVerticalComponentAlignment(Alignment.END);
 		add(layout);
 	}
 
-	/**
-	 * implicitly add results to UI
-	 */
-	private void calculateWorkingTimes( /* from and to DateTime */ ) {
+	private void calculateWithParameters( /* from and to DateTime */ ) {
 
 		LocalDateTime fromTime = fromDate.getValue();
 		LocalDateTime toTime = toDate.getValue();
-		
+
 //		TODO add TimeZone Berlin !! or times can deviate some hours
+//		fromDate.getDatePickerI18n();
+//		fromDate.getLocale();
+//		fromDate.getTranslation(key, params);
+//		fromDate.isWeekNumbersVisible();
+		
 		Span result = new Span("Arbeitszeiten von " + fromTime + " bis " + toTime);
-		add(result);
+//		add(result);
 
 		result = new Span("calculate for " + traccarModel.getDevices().size() + " devices.");
 		add(result);
