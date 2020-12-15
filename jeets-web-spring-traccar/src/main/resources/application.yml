@@ -1,0 +1,11 @@
+server:
+    port: ${PORT:8080}
+rest:
+    protocol: http://
+    server: demo3.traccar.org
+#   protocol: https://
+#   server: traccar.virtex.de
+    api: /api
+
+# spring.security.user.name
+# spring.security.user.password

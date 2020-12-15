@@ -3,15 +3,23 @@
 
 = Release Notes - JeeTS Web Repository
 
-=== v1.0-beta - December 2020
+=== 2020 December - v1.0
+
+ * Added `jeets-web-vaadin` project as a sample
+   starter to create a Traccar Frontend with little code.
+   
+
+=== 2020 December - v1.0-beta
 
 initial release: 
 
  * `jeets-generate-openapi-traccar` generates Open API client 
-   `jeets-openapi-traccar` from Traccar swagger file
+   `jeets-openapi-traccar` from Traccar swagger file v4.10
  
  * import Open API client `jeets-openapi-traccar` 
    into Spring MVC Component `jeets-web-spring-traccar`
  
- * provide role based `TraccarModel.java`
-
+ * provide role based `TraccarModel.java` for Spring **M**VC
+   to create a Spring *Model* Component leaving the
+   **V**iews and **C**ontrollers for higher level projects.
+   

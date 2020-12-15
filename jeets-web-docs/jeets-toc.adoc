@@ -10,8 +10,8 @@
 
 = JeeTS Web Inline Documentation
 
-The JeeTS Software and the JeeTS Web Software are enabling the Traccar GTS
-for the Spring Framework, which is the modern de facto standard
+The JeeTS Software and the JeeTS Web Software are taking the Traccar GTS
+to the Spring Framework, which is the modern de facto standard
 to develop applications in Java
 and, if needed, according to the Java EE specification (Jakarta). 
 
@@ -20,14 +20,15 @@ for the Traccar Tracking System. +
 Some customers are using the original Traccar Web Frontend to manage users and devices
 but also have internal requirements for complex calculation of reports.
 With this toolkit you can create any web page to display any Traccar entities
-and process complicated algorithms with their values.
+and process complicated algorithms with their attributes and values.
 
 
 == Architecture
 
 The JeeTS Web has emerged from customer requests for individual reporting. 
 It turned out that it makes more sense to create a basic Model with a safe login
-to the Traccar Backend via Traccar REST API than modifying Traccar Web.
+to the Traccar Backend via Traccar REST API 
+than modifying the original traccar-web project.
 By using REST we automatically get role based access to permitted objects only
 - managed in the original frontend.
 
@@ -67,7 +68,7 @@ representing the *Open API Java Client for Traccar*.
 
 link:../jeets-client-api/jeets-generate-openapi-traccar/README.adoc[go to project]
 
-Note that Traccar version 4.11 is supplying the REST API with an openapi file:
+Note that Traccar version 4.11 is supplying the REST API with an Open API file:
 [source,xml]
 ----
     "openapi": "3.0.1",
@@ -111,11 +112,8 @@ So the project is actually a Spring-*Traccar-Model* Component
 and you can easily create your own *Controllers* and *Views*
 for your own purposes.
 
-We will publish an initial implementation of proprietary frontend views 
-with custom Controllers to demonstrate how easy it is to build 
-your Traccar appearance. Until then the version is marked with `-beta`.
-
-Stay tuned!
+The `jeets-web-vaadin` project below is a simple demonstration
+to create a frontend with your own Controllers and Views.
 
 link:../jeets-web-spring-traccar/readme.adoc[go to project]
 
@@ -132,7 +130,7 @@ as the _Jee_ TS was created for _Java_ Developers and
 vaadin is "An open platform for building web apps in _Java_".
 Java and Web Developers require different skills and roles 
 usually filled by different people.
-Vaadin fills this gap and links the JavaSkript stuff for you in the release process.
+Vaadin fills this gap and links the JavaSkript stuff for you in the build process.
 
 
 link:../jeets-web-vaadin/readme.adoc[go to project]

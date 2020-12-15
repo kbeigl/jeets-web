@@ -19,7 +19,7 @@ link:https://vaadin.com/start[starter application]:
 If you install this starter project parallel to this project
 you should quickly get oriented and start coding.
 
-This document only lists the major mile stones from this 
+This document only covers the major mile stones from this 
 link:https://vaadin.com/learn/tutorials/modern-web-apps-with-spring-boot-and-vaadin[Vaadin Tutorial]: +
 "This guide is a practical introduction to web application development with Spring Boot and Vaadin.
 It covers the entire development process, from setup to deployment, following a step-by-step approach. 
@@ -36,18 +36,18 @@ We expect you to be familiar with JeeTS and have followed the instructions
 to install a Java Developer Kit, the Maven Build Tool, Git Version Control,
 that you have run a `mvn clean install` over this repository
 and maybe have already imported the projects into your IDE.
-This process works for the regular JeeTS repository, but in case of the JeeTS Web
+This process works for the regular _JeeTS_ repository, but in case of the _JeeTS Web_
 you will run into a build problem without the 
 link:https://nodejs.org[Front-end build tool Node.js],
-a JavaScript run-time environment, on your OS.
+a JavaScript run-time environment - _installed on your OS!_
 Vaadin uses Node internally to build an optimized version of your app.
 
 Node Installation steps:
 
  * Go to the link:https://nodejs.org/en/download/[Node.js download page]
 
- * Download and run the (Windows) Installer for your system +
-   (other operating systems are covered in the Vaadin Tutorial pdf)
+ * Download and run the Installer for your system +
+   (different operating systems are covered in the Vaadin Tutorial pdf)
  
  * Follow the prompts in the wizard.
  
@@ -57,13 +57,79 @@ Node Installation steps:
    reflecting every change immediately in your browser.
 
 Now the `mvn install` process should run smoothly, 
-should see the `npm install` in the logs
+you should see the `npm install` in the logs
 and the repository should compile with `BUILD SUCCESS`.
 
-mvn spring-boot:run can require two runs! 
+TODO check repo size against built size ...
 
-javax.servlet.ServletException: com.vaadin.flow.server.ServiceException: com.vaadin.flow.server.BootstrapException: Unable to read webpack stats file.
-	com.vaadin.flow.server.VaadinServlet.service(VaadinServlet.java:249)
+
+== Install and Run Out of the Box
+
+This `jeets-web-vaadin` project provides a functional frontend application 
+to be installed on any server. In addition you can also run it 
+in your local environment with for development and for Traccar Management.
+
+    mvn clean install spring-boot:run
+
+and opened in your browser with
+
+    http://localhost:8080
+
+You can implement your own administration to analyze and clean data (as example),
+which is nothing a customer would want to use nor see.
+    
+
+=== Traccar Server Instance
+
+You should keep in mind that this project is simply an alternative frontend
+to the provided `traccar-web` project. And both rely on a running
+Traccar backend server with a REST API.
+
+If you have your own Traccar Server running 
+you can configure it in the `application.yml` file
+of the underlying `jeets-web-spring-traccar` project!
+
+    rest:
+       protocol: https://
+       server: traccar.virtex.de
+       api: /api
+
+This server config is composed in the `TraccarAuthenticationProvider`
+
+    @Value("${rest.protocol}${rest.server}${rest.api}")
+    private String restServerApi; //      => https://traccar.virtex.de/api
+
+If you _do not_ have your own Traccar Server running you can also use
+one of link:https://www.traccar.org/demo-server/[Traccar's Demo Servers]
+
+    rest:
+       protocol: http://
+       server: demo3.traccar.org
+       api: /api
+
+In this case you will need a valid user to login via Vaadin.
+To get one you simply register a new user on the demo server.
+Then you can login to create a device dedicated to the user 
+and finally you can install the Traccar Client on your smartphone
+to get some tracking data to work with.
+The disadvantage of using a demo server is that you can only
+register a regular user and therefore cannot develop 
+for Traccar Managers and Administrators.
+
+
+=== ServletException and ServiceException
+
+Please note that `mvn spring-boot:run` occasionally runs into timing
+problems and you will see Exceptions on command line and in the browser:
+
+    javax.servlet.ServletException: com.vaadin.flow.server.ServiceException: 
+      com.vaadin.flow.server.BootstrapException: Unable to read webpack stats file.
+      com.vaadin.flow.server.VaadinServlet.service(VaadinServlet.java:249)
+         :
+
+In this case you should simply rerun the command line and 
+it should automatically display the login screen.
+
 
 
 == Login to a Vaadin app with Spring Security

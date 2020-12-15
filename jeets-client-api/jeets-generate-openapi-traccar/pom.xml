@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-client-api</artifactId>
-		<version>1.0-beta</version>
+		<version>1.0</version>
 	</parent>
 
 	<artifactId>jeets-generate-openapi-traccar</artifactId>

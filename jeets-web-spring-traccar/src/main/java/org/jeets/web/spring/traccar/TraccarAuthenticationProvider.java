@@ -9,6 +9,7 @@ import org.openapitools.client.Configuration;
 import org.openapitools.client.api.DefaultApi;
 import org.openapitools.client.auth.HttpBasicAuth;
 import org.openapitools.client.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
  */
 public class TraccarAuthenticationProvider implements AuthenticationProvider {
 
+    @Value("${rest.protocol}${rest.server}${rest.api}")
+    private String restServerApi;
+
 	/**
 	 * Since we can not rely on having a Session (to set @SessionAttributes
 	 * and @ModelAttribute-s) at this point (via Spring Configuration) we store the
@@ -41,15 +45,9 @@ public class TraccarAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-//		maybe add .httpBasic().authenticationEntryPoint as described in
-//		stackoverflow.com/questions/56037031/ 
-//		authenticationexception-thrown-in-authenticationprovider-is-mapped-to-accessdeni
-			
-		// Server must be running, change to traccar demo before publishing, 
-		// i.e. make server URL configurable
-		// OR hidden third entry on login page !
-		String serverUrl = "https://traccar.virtex.de/api";
-		DefaultApi traccarApi = createTraccarApi(serverUrl);
+		// Server must be running
+		System.out.println("create REST API for " + restServerApi);
+		DefaultApi traccarApi = createTraccarApi(restServerApi);
 
 		String username = authentication.getPrincipal().toString();
 //		credentials / password are visible at this point
@@ -112,7 +110,7 @@ public class TraccarAuthenticationProvider implements AuthenticationProvider {
 //			throw new UsernameNotFoundException("could not find " + username);
 //			AuthenticationCredentialsNotFoundException
 		}
-		return null;	// NOT authenticated
+		return null;	// NOT authenticated > 'incorrect user or password'
 	}
 
 	/**

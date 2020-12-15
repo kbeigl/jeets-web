@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-web</artifactId>
-		<version>1.0-beta</version>
+		<version>1.0</version>
 	</parent>
 	
 	<artifactId>jeets-web-parent</artifactId>

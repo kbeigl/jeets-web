@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-web-parent</artifactId>
-		<version>1.0-beta</version>
+		<version>1.0</version>
 		<relativePath>../jeets-web-parent</relativePath>
 	</parent>
 

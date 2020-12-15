@@ -22,7 +22,7 @@
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets-web</artifactId>
 	<!-- main JeeTS Web repo version -->
-	<version>1.0-beta</version>
+	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<!-- global parent to benefit from dependency management AND plugin management -->
