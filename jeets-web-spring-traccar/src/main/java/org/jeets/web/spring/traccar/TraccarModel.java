@@ -89,7 +89,7 @@ public class TraccarModel {
 //	public void      printOrm() { for dashboard
 	public void initializeOrm() { // populateModel(Model m)
 		System.out.println("initializeOrm ..");
-		setUserDevices(); // works for any user role
+		requestUserDevices(); // works for any user role
 //		user/s, group/s ...
 	}
 
@@ -133,7 +133,7 @@ public class TraccarModel {
 	 */
 	@IsTraccarUser
 //	@ModelAttribute("devices") // (binding=false)
-	public void setUserDevices() {
+	public void requestUserDevices() {
 //		only retrieve ALL devices once per session (?)
 //		if (devices != null && !devices.isEmpty() && refresh())
 //			return devices;
@@ -166,7 +166,7 @@ public class TraccarModel {
 //	2020-11-27 18:26:53.341 ERROR 10500 --- [nio-8080-exec-7] com.VAADIN.flow.server.DefaultErrorHandler
 //	org.springframework.security.access.AccessDeniedException: Zugriff verweigert
 //	TODO apply @PreAuthorize instead of @PostAuthorize (at dev time to println API Exception)
-	public void setAllDevices() {
+	public void requestAllDevices() {
 //		only retrieve ALL devices once per session (?)
 //		if (devices != null && !devices.isEmpty())
 //			return devices;

@@ -24,7 +24,7 @@ public class DeviceView extends VerticalLayout {
 
 //	TODO: i18n
 
-	public DeviceView(TraccarModel model) { // service
+	public DeviceView(TraccarModel model) {
 		traccarModel = model;
 //		setDefaultHorizontalComponentAlignment(Alignment.CENTER);
 //		addClassName("dashboard-view");
@@ -101,13 +101,13 @@ public class DeviceView extends VerticalLayout {
 	 * Retrieve all devices of the logged in user.
 	 */
 	private void setUserDevices() {
-		traccarModel.setUserDevices();
+		traccarModel.requestUserDevices();
 		grid.setItems(traccarModel.getDevices());
 	}
 
 //	@IsTraccarAdminOrManager doesn't work here ?? !!
 	private void setAllDevices() {
-		traccarModel.setAllDevices();
+		traccarModel.requestAllDevices();
 		grid.setItems(traccarModel.getDevices());
 	}
 

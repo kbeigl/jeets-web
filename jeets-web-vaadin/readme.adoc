@@ -5,29 +5,10 @@
 
 = JeeTS Web Vaadin
 
-This project provides a skeleton to create your own Traccar Frontend - rapidly.
+This project provides a starter to create your own Traccar Frontend - rapidly.
 It implies the `jeets-web-spring-traccar` project 
 which controls the embedded Tomcat Servlet Engine
 and has a built in *Open API Client for Traccar*.
-
-If you don't know the Vaadin Framework yet you should visit the 
-link:https://vaadin.com/[vaadin website] 
-full of material to get started, learn and build.
-You might want to download their  
-link:https://vaadin.com/start[starter application]:
-*Starting point for Vaadin 14 applications with Spring Boot*.
-If you install this starter project parallel to this project
-you should quickly get oriented and start coding.
-
-This document only covers the major mile stones from this 
-link:https://vaadin.com/learn/tutorials/modern-web-apps-with-spring-boot-and-vaadin[Vaadin Tutorial]: +
-"This guide is a practical introduction to web application development with Spring Boot and Vaadin.
-It covers the entire development process, from setup to deployment, following a step-by-step approach. 
-The content is suitable for anyone familiar with Java who wants to build a web application."
-
-WARNING: Please note that Vaadin provides free Open Source and commercial components! +
-If you decide to use the commercial products you need to get a license before going live. +
-The JeeTS Web only uses the free components unless dedicated customers ask for more.
 
 
 == Install Node.js
@@ -36,8 +17,9 @@ We expect you to be familiar with JeeTS and have followed the instructions
 to install a Java Developer Kit, the Maven Build Tool, Git Version Control,
 that you have run a `mvn clean install` over this repository
 and maybe have already imported the projects into your IDE.
-This process works for the regular _JeeTS_ repository, but in case of the _JeeTS Web_
-you will run into a build problem without the 
+This process works for the regular _JeeTS_ repository.
+
+In case of the _JeeTS Web_ you will run into a build problem without the 
 link:https://nodejs.org[Front-end build tool Node.js],
 a JavaScript run-time environment - _installed on your OS!_
 Vaadin uses Node internally to build an optimized version of your app.
@@ -60,30 +42,70 @@ Now the `mvn install` process should run smoothly,
 you should see the `npm install` in the logs
 and the repository should compile with `BUILD SUCCESS`.
 
-TODO check repo size against built size ...
 
-
-== Install and Run Out of the Box
+== Run Out of the Box
 
 This `jeets-web-vaadin` project provides a functional frontend application 
 to be installed on any server. In addition you can also run it 
 in your local environment with for development and for Traccar Management.
 
-    mvn clean install spring-boot:run
 
-and opened in your browser with
+=== Install
+
+First you need to run
+
+    mvn clean install 
+    
+over the complete repository. Note that the install process creates
+a new folder in the Vaadin project
+
+    ...\jeets-web-vaadin\node_modules
+    
+and when you run Vaadin the first time with
+    
+    ...\jeets-web-vaadin\mvn spring-boot:run
+
+the new folder should be filled and is logged with
+
+    16:19:12.008  INFO 16012 --- [restartedMain] dev-updater:
+          Running `npm install` to resolve and optionally download frontend dependencies. 
+          This may take a moment, please stand by...
+    16:23:17.372  INFO 16012 --- [restartedMain] dev-updater: 
+          Frontend dependencies resolved successfully.
+
+This first run loads the vaadin resources (javaskript elements etc.) to your repo
+and the `node_modules` folder should be filled with about 18.000 files with a total size of 88 MB. In this case an average machine took about four minutes. 
+After the folder is filled the process should start Tomcat and after you see this line 
+
+    Started webpack-dev-server. Time: 17039ms
+    
+you can open the application in the browser
 
     http://localhost:8080
 
-You can implement your own administration to analyze and clean data (as example),
-which is nothing a customer would want to use nor see.
+You are ready to implement your own administration to analyze and clean data 
+and many other things to support your customers.
     
+
+==== ServletException and ServiceException
+
+Please note that `mvn spring-boot:run` occasionally runs into timing
+problems and you will see Exceptions on command line _and_ in the browser:
+
+    javax.servlet.ServletException: com.vaadin.flow.server.ServiceException: 
+      com.vaadin.flow.server.BootstrapException: Unable to read webpack stats file.
+      com.vaadin.flow.server.VaadinServlet.service(VaadinServlet.java:249)
+         :
+
+In this case you should simply rerun the command line and 
+it should automatically display the login screen.
+
 
 === Traccar Server Instance
 
 You should keep in mind that this project is simply an alternative frontend
-to the provided `traccar-web` project. And both rely on a running
-Traccar backend server with a REST API.
+to the provided `traccar-web` project. 
+Both rely on a running Traccar backend server with a REST API.
 
 If you have your own Traccar Server running 
 you can configure it in the `application.yml` file
@@ -97,7 +119,7 @@ of the underlying `jeets-web-spring-traccar` project!
 This server config is composed in the `TraccarAuthenticationProvider`
 
     @Value("${rest.protocol}${rest.server}${rest.api}")
-    private String restServerApi; //      => https://traccar.virtex.de/api
+    private String restServerApi; //         => "https://traccar.virtex.de/api"
 
 If you _do not_ have your own Traccar Server running you can also use
 one of link:https://www.traccar.org/demo-server/[Traccar's Demo Servers]
@@ -112,61 +134,19 @@ To get one you simply register a new user on the demo server.
 Then you can login to create a device dedicated to the user 
 and finally you can install the Traccar Client on your smartphone
 to get some tracking data to work with.
-The disadvantage of using a demo server is that you can only
+
+IMPORTANT: The disadvantage of using a demo server is that you can only
 register a regular user and therefore cannot develop 
 for Traccar Managers and Administrators.
 
 
-=== ServletException and ServiceException
+== Explore Vaadin
 
-Please note that `mvn spring-boot:run` occasionally runs into timing
-problems and you will see Exceptions on command line and in the browser:
-
-    javax.servlet.ServletException: com.vaadin.flow.server.ServiceException: 
-      com.vaadin.flow.server.BootstrapException: Unable to read webpack stats file.
-      com.vaadin.flow.server.VaadinServlet.service(VaadinServlet.java:249)
-         :
-
-In this case you should simply rerun the command line and 
-it should automatically display the login screen.
+After you have gone through the setup once you can start learning and developing. +
+The simple link:architecture.adoc[architecture of the project is described here]  +
+where you will also find links to related Vaadin Tutorials. 
 
 
 
-== Login to a Vaadin app with Spring Security
-
-In the 
-link:https://vaadin.com/learn/tutorials/modern-web-apps-with-spring-boot-and-vaadin[Vaadin Tutorial]
-you should go through the chapter:
-*Adding a login screen to a Vaadin app with Spring Security*
-to identify the classes for Vaadin with Spring Security
-in the package `org.jeets.web.vaadin.security`.
-With this security package, the `LoginView` and the main `Application` class
-the preparations are done and you can proceed to the chapter
-*Vaadin basics: building UIs with components and layouts*.
-
-
-== Main Layout and Views
-
-The Tutorial chapter *Navigating between views in Vaadin* describes the `MainLayout`
-and `*View` class mechanisms of user navigation in the browser.
-You will learn how to define paths in vaadin with the `@Route` annotation,
-one of the differences to the methods of Spring MVC.
-
-
-
-== Role Secured TraccarModel
-
-Now you need a running Traccar instance .. use traccar.demo#.org to register user (and manager?)
-
-Note that the `Application` class is placed in the top level package `org.jeets.web`
-in order to automatically scan the sub packages from the `jeets-web-spring-traccar` project.
-
-Evaluate against / replaces? @Model with ModelAttributes
-
-
-== Reports
-
-
-== Map !!
 
 
