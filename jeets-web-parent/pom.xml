@@ -44,9 +44,8 @@
 		<maven.build.timestamp.format>dd.MM.yyyy HH:mm:ss</maven.build.timestamp.format>
 		<jeets.properties.file>jeets-web.properties</jeets.properties.file>
 
-		<!-- maven settings -->
-		<!-- <jdk.version>1.8</jdk.version> -->
-		<!-- <java.version>1.8</java.version> -->
+		<!-- <jdk.version>  .. -->
+		<!-- <java.version> .. -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 
@@ -132,28 +131,6 @@
 					<!-- <inherited>true</inherited> ?? -->
 				</plugin>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<version>${maven-assembly-plugin-version}</version>
-					<configuration>
-						<descriptorRefs>
-							<descriptorRef>jar-with-dependencies</descriptorRef>
-						</descriptorRefs>
-					</configuration>
-					<executions>
-						<execution>
-							<!-- this is used for inheritance merges -->
-							<id>make-assembly</id>
-                            <!-- difference? <id>assemble-all</id> -->
-							<!-- bind to the packaging phase -->
-							<phase>package</phase>
-							<goals>
-								<goal>single</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
 				<!-- This plugin is meant to be run as part of the standard build lifecycle, 
 					to help establish locations for files in multi module builds, 
 					where the directory structure referenced is stable and will always be intact. 
@@ -220,20 +197,6 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<!-- this is only used in pu ! move down ? simplify here -->
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>sql-maven-plugin</artifactId>
-										<versionRange>${sql-maven-plugin-version}</versionRange>
-										<goals>
-											<goal>execute</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
 										<groupId>org.commonjava.maven.plugins</groupId>
 										<artifactId>directory-maven-plugin</artifactId>
 										<versionRange>${directory-maven-plugin-version}</versionRange>
@@ -252,25 +215,77 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
+			<!-- also consider 
+			github.com/spring-io/spring-javaformat
+			github.com/spring-projects/spring-boot/src/checkstyle/checkstyle.xml
+
+			adjust fmt and checkstyle versions to use the same google_checks
+			one known combination from internet 2.9 - 3.1.0
+			consider only using fmt on commandline and in mvn phase -->
+			<plugin>
+				<groupId>com.coveo</groupId>
+				<artifactId>fmt-maven-plugin</artifactId>
+				<!-- 2.10 implies google-java-format v1.8 -->
+				<version>2.9</version>
+				<configuration>
+					<verbose>true</verbose>
+					<!-- path+file syntax? .*org/jeets/web/spring/annotations/*.java -->
+					<filesNamePattern>.*\.java</filesNamePattern>
+					<skip>false</skip>
+					<skipSortingImports>false</skipSortingImports>
+					<style>google</style>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.0</version>
+				<!-- define explicit checkstyle version
+			    <dependencies>
+			        <dependency>
+			            <groupId>com.puppycrawl.tools</groupId>
+			            <artifactId>checkstyle</artifactId>
+			            <version>8.36</version>
+			        </dependency>
+			    </dependencies>
+				define explicit local file
+			    <configuration>
+			        <configLocation>my_checks.xml</configLocation>
+			    </configuration>
+			     -->
+   				<configuration>
+					<!-- project packages: **\/org\jeets\web\spring\**\*.java -->
+					<includes>**\/org\jeets\web\*.java</includes>
+					<configLocation>google_checks.xml</configLocation>
+				</configuration>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<configuration>
+							<encoding>UTF-8</encoding>
+							<consoleOutput>true</consoleOutput>
+							<failsOnError>true</failsOnError>
+							<linkXRef>false</linkXRef>
+						</configuration>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 <!-- 			
 				<plugin>  ** used in jeets-protocols-traccar **
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>${version-maven-dependency-plugin}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>${version-maven-release-plugin}</version>
-					<configuration>
-						<autoVersionSubmodules>true</autoVersionSubmodules>
-						<tagNameFormat>@{project.version}</tagNameFormat>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>${version-maven-war-plugin}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -283,6 +298,33 @@
  -->
 			</plugins>
 		</pluginManagement>
+
+		
+
 	</build>
 
+<!-- 
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.0.0</version>
+			</plugin>
+			<plugin>
+				- explicitly defined for checkstyle above -
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7.1</version>
+			</plugin>
+			<plugin>
+				 - Maven 3 doesn't support Doxia anymore 
+				     endless loading for Maven 2 - optimize! -
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+		</plugins>
+	</reporting>
+ -->
 </project>

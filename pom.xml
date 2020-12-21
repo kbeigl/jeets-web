@@ -33,7 +33,9 @@
     </parent>
     
     <properties>
-        <java.version>1.8</java.version>
+    	<!-- experiment with web-parent/pom versions -->
+    	<!-- runs with java-11-openjdk-11.0.8-1 -->
+        <java.version>11</java.version>
     </properties>
 
 	<name>=== JeeTS-Web - Java EE Tracking Frontend   ===</name>
