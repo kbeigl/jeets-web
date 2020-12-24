@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-    Copyright 2020 The Java EE Tracking System - JeeTS
-    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
-    
-    The JEE Tracking System licenses this file to you 
-    under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-    	http://www.apache.org/licenses/LICENSE-2.0
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -78,7 +63,8 @@
 	</properties>
 	
 	<build>
-		<!-- Operating system and CPU architecture detection extension -->
+		<!-- Operating system and CPU architecture detection extension 
+			similar to 'mvn ... -X' -->
 		<extensions>
 			<extension>
 				<groupId>kr.motd.maven</groupId>
@@ -87,150 +73,141 @@
 			</extension>
 		</extensions>
 
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>${maven-surefire-plugin-version}</version>
-				    <configuration>
-				        <skipTests>${skip.unit.tests}</skipTests>
-						<!-- this is important to terminate target\surefire\surefirebooterXXX.jar 
-							if test is cancelled with <CTRL> + <C>. Otherwise port remains blocked!! -->
-						<shutdown>kill</shutdown>
-				    </configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${maven-compiler-plugin-version}</version>
-	                <configuration>
-	                    <source>${maven.compiler.source}</source>
-	                    <target>${maven.compiler.target}</target>
-	                    <!-- docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html#nonstandard -->
-	                    <!-- <compilerArgument>-Xlint:unchecked</compilerArgument>
-						<maxmem>512M</maxmem>
+	<pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin-version}</version>
+				<configuration>
+					<skipTests>${skip.unit.tests}</skipTests>
+					<!-- this is important to terminate target\surefire\surefirebooterXXX.jar 
+						if test is cancelled with <CTRL> + <C>. Otherwise port remains blocked!! -->
+					<shutdown>kill</shutdown>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin-version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<!-- docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html#nonstandard -->
+					<!-- <compilerArgument>-Xlint:unchecked</compilerArgument> <maxmem>512M</maxmem> 
 						<showDeprecation>true</showDeprecation> -->
-	                </configuration>
-				</plugin>
-				<plugin>
-				<!-- invoke with mvn source:jar or avoid specifying the source plugin in 
-					each of the child projects. For this you need to put it to build -> plugins 
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- invoke with mvn source:jar or avoid specifying the source plugin 
+					in each of the child projects. For this you need to put it to build -> plugins 
 					section of parent pom, not build -> pluginManagement. – Andrew Logvinov -->
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>${maven-source-plugin-version}</version>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-					<!-- <inherited>true</inherited> ?? -->
-				</plugin>
-				<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven-source-plugin-version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<!-- <inherited>true</inherited> ?? -->
+			</plugin>
+			<plugin>
 				<!-- This plugin is meant to be run as part of the standard build lifecycle, 
-					to help establish locations for files in multi module builds, 
-					where the directory structure referenced is stable and will always be intact. 
-					Inconsistencies can cause false positives or false negatives! -->
-					<groupId>org.commonjava.maven.plugins</groupId>
-					<artifactId>directory-maven-plugin</artifactId>
-					<version>${directory-maven-plugin-version}</version>
-					<executions>
-						<execution>
-							<id>directories</id>
-							<goals>
-								<goal>highest-basedir</goal>
-							</goals>
-							<phase>initialize</phase>
-							<!-- <id>directories</id> -->
-							<configuration>
-								<!-- root for all paths ! -->
-								<property>jeets.repo.directory</property>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>properties-maven-plugin</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<files>
-							<!-- Properties are read from a single property file 
-							      AND hardcode in the pom files like this: -->
-							<file>${jeets.repo.directory}/${jeets.properties.file}</file>
-						</files>
-					</configuration>
-					<executions>
-						<!-- Load properties for the default lifecycle -->
-						<execution>
-							<id>default-lifecycle-properties</id>
-							<phase>initialize</phase>
-							<goals>
-								<goal>read-project-properties</goal>
-							</goals>
-						</execution>
-						<!-- Load properties for the clean lifecycle 
-						<execution> <id>clean-lifecycle-properties</id> 
-							<phase>pre-clean</phase> <goals> <goal>read-project-properties</goal> </goals> 
+					to help establish locations for files in multi module builds, where the directory 
+					structure referenced is stable and will always be intact. Inconsistencies 
+					can cause false positives or false negatives! -->
+				<groupId>org.commonjava.maven.plugins</groupId>
+				<artifactId>directory-maven-plugin</artifactId>
+				<version>${directory-maven-plugin-version}</version>
+				<executions>
+					<execution>
+						<id>directories</id>
+						<goals>
+							<goal>highest-basedir</goal>
+						</goals>
+						<phase>initialize</phase>
+						<!-- <id>directories</id> -->
+						<configuration>
+							<!-- root for all paths ! -->
+							<property>jeets.repo.directory</property>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<files>
+						<!-- Properties are read from a single property file AND hardcode in 
+							the pom files like this: -->
+						<file>${jeets.repo.directory}/${jeets.properties.file}</file>
+					</files>
+				</configuration>
+				<executions>
+					<!-- Load properties for the default lifecycle -->
+					<execution>
+						<id>default-lifecycle-properties</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+					</execution>
+					<!-- Load properties for the clean lifecycle <execution> <id>clean-lifecycle-properties</id> 
+						<phase>pre-clean</phase> <goals> <goal>read-project-properties</goal> </goals> 
 						</execution> -->
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>${maven-resources-plugin-version}</version>
-					<configuration>
-						<!-- apply ${project.build.sourceEncoding}? -->
-						<encoding>UTF-8</encoding>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>${lifecycle-mapping-version}</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.commonjava.maven.plugins</groupId>
-										<artifactId>directory-maven-plugin</artifactId>
-										<versionRange>${directory-maven-plugin-version}</versionRange>
-										<goals>
-											<goal>highest-basedir</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<execute>
-											<runOnIncremental>true</runOnIncremental>
-											<runOnConfiguration>true</runOnConfiguration>
-										</execute>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			<!-- also consider 
-			github.com/spring-io/spring-javaformat
-			github.com/spring-projects/spring-boot/src/checkstyle/checkstyle.xml
-
-			adjust fmt and checkstyle versions to use the same google_checks
-			one known combination from internet 2.9 - 3.1.0
-			consider only using fmt on commandline and in mvn phase -->
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources-plugin-version}</version>
+				<configuration>
+					<!-- apply ${project.build.sourceEncoding}? -->
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.m2e</groupId>
+				<artifactId>lifecycle-mapping</artifactId>
+				<version>${lifecycle-mapping-version}</version>
+				<configuration>
+					<lifecycleMappingMetadata>
+						<pluginExecutions>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.commonjava.maven.plugins</groupId>
+									<artifactId>directory-maven-plugin</artifactId>
+									<versionRange>${directory-maven-plugin-version}</versionRange>
+									<goals>
+										<goal>highest-basedir</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<execute>
+										<runOnIncremental>true</runOnIncremental>
+										<runOnConfiguration>true</runOnConfiguration>
+									</execute>
+								</action>
+							</pluginExecution>
+						</pluginExecutions>
+					</lifecycleMappingMetadata>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>com.coveo</groupId>
 				<artifactId>fmt-maven-plugin</artifactId>
-				<!-- 2.10 implies google-java-format v1.8 -->
-				<version>2.9</version>
+				<version>2.10</version>
 				<configuration>
 					<verbose>true</verbose>
-					<!-- path+file syntax? .*org/jeets/web/spring/annotations/*.java -->
-					<filesNamePattern>.*\.java</filesNamePattern>
+					<!-- see java.util.regex.Pattern javadoc. default: .*\.java
+					<filesNamePattern>.*\.java</filesNamePattern> -->
+					<filesPathPattern>.*org\\jeets\\web\\.*</filesPathPattern>
 					<skip>false</skip>
 					<skipSortingImports>false</skipSortingImports>
 					<style>google</style>
@@ -238,93 +215,14 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>format</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.0</version>
-				<!-- define explicit checkstyle version
-			    <dependencies>
-			        <dependency>
-			            <groupId>com.puppycrawl.tools</groupId>
-			            <artifactId>checkstyle</artifactId>
-			            <version>8.36</version>
-			        </dependency>
-			    </dependencies>
-				define explicit local file
-			    <configuration>
-			        <configLocation>my_checks.xml</configLocation>
-			    </configuration>
-			     -->
-   				<configuration>
-					<!-- project packages: **\/org\jeets\web\spring\**\*.java -->
-					<includes>**\/org\jeets\web\*.java</includes>
-					<configLocation>google_checks.xml</configLocation>
-				</configuration>
-				<executions>
-					<execution>
-						<id>validate</id>
-						<phase>validate</phase>
-						<configuration>
-							<encoding>UTF-8</encoding>
-							<consoleOutput>true</consoleOutput>
-							<failsOnError>true</failsOnError>
-							<linkXRef>false</linkXRef>
-						</configuration>
-						<goals>
 							<goal>check</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
-<!-- 			
-				<plugin>  ** used in jeets-protocols-traccar **
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>${version-maven-dependency-plugin}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<version>${version-exec-maven-plugin}</version>
-				</plugin> 
-                <plugin>  ** used in jeets-protocols-traccar **
-	                <artifactId>maven-enforcer-plugin</artifactId>
-	                <version>1.4.1</version>
- -->
-			</plugins>
-		</pluginManagement>
-
-		
+		</plugins>
+	</pluginManagement>
 
 	</build>
 
-<!-- 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.0.0</version>
-			</plugin>
-			<plugin>
-				- explicitly defined for checkstyle above -
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.7.1</version>
-			</plugin>
-			<plugin>
-				 - Maven 3 doesn't support Doxia anymore 
-				     endless loading for Maven 2 - optimize! -
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.7</version>
-			</plugin>
-		</plugins>
-	</reporting>
- -->
 </project>

@@ -56,14 +56,14 @@ public class TraccarModel {
       System.out.println(
           "authenticated Traccar User " + TraccarAuthentication.getTraccarUser().getName());
     }
-    //		else is NOT authenticated ..
+    // else is NOT authenticated ..
 
-    //		error handling ?
+    // error handling ?
 
     initializeOrm();
   }
 
-  /** return one readable role string for frontend */
+  /** return one readable role string for frontend. */
   // TODO move strings out of Model and add i18n externally
   public String getRoleString() {
     if (TraccarAuthentication.isAdmin()) {
@@ -78,19 +78,19 @@ public class TraccarModel {
   }
 
   /** Initialize all values to avoid null and NPEx on initial views. */
-  //	public void    refreshOrm() { to explicitly access server
-  //	public void      printOrm() { for dashboard
+  // public void    refreshOrm() { to explicitly access server
+  // public void      printOrm() { for dashboard
   public void initializeOrm() { // populateModel(Model m)
     System.out.println("initializeOrm ..");
     requestUserDevices(); // works for any user role
-    //		user/s, group/s ...
+    // user/s, group/s ...
   }
 
-  //	==================== The Static Traccar Model ====================
+  // ==================== The Static Traccar Model ====================
 
-  //	part of the Spring MVC Model
-  //	each device brings its own ORM to be filled
-  //	TODO display ${devices} in a html view as reference to @ModelAttribute
+  // part of the Spring MVC Model
+  // each device brings its own ORM to be filled
+  // TODO display ${devices} in a html view as reference to @ModelAttribute
   /**
    * The Device list is created for session use and can be used to lookup each Device (by different
    * search methods).
@@ -109,7 +109,7 @@ public class TraccarModel {
     return devices;
   }
 
-  //	==================================================================
+  // ==================================================================
 
   /*
    * on a longer term the three (four) access categories should be distributed
@@ -132,18 +132,18 @@ public class TraccarModel {
     System.out.println("setUserDevices");
     try {
       /*
-      	 *      ALL - Can only be used by admins or managers to fetch all entities (optional)
-      =>	 *   userId - Standard users can use this only with their own _userId_ (optional)
-        	 *       id - To fetch one or more devices.
-        	 * 		Multiple params can be passed like `id=31&id=42` (optional)
-        	 * uniqueId - To fetch one or more devices.
-        	 * 		Multiple params can be passed like `uniqueId=333331&uniqieId=44442` (optional)
-        	 */
+         *      ALL - Can only be used by admins or managers to fetch all entities (optional)
+      => *   userId - Standard users can use this only with their own _userId_ (optional)
+         *       id - To fetch one or more devices.
+         *            Multiple params can be passed like `id=31&id=42` (optional)
+         * uniqueId - To fetch one or more devices.
+         *      Multiple params can be passed like `uniqueId=333331&uniqieId=44442` (optional)
+         */
       devices =
           traccarApi.devicesGet(null, TraccarAuthentication.getTraccarUser().getId(), null, null);
-      //			return
+      // return
       // traccarApi.devicesGet(null,TraccarAuthentication.getTraccarUser().getId(),null,null);
-      //			return traccarApi.devicesGet(true,null,null,null); // admin only !!
+      //  return traccarApi.devicesGet(true,null,null,null); // admin only !!
 
     } catch (ApiException e) {
       System.err.println("Exception when calling DefaultApi");
@@ -154,12 +154,13 @@ public class TraccarModel {
     }
   }
 
+  /** */
   @IsTraccarAdminOrManager
-  //	HOW and WHERE TO CATCH ??
-  //	2020-11-27 18:26:53.341 ERROR 10500 --- [nio-8080-exec-7]
+  // HOW and WHERE TO CATCH ??
+  // 2020-11-27 18:26:53.341 ERROR 10500 --- [nio-8080-exec-7]
   // com.VAADIN.flow.server.DefaultErrorHandler
-  //	org.springframework.security.access.AccessDeniedException: Zugriff verweigert
-  //	TODO apply @PreAuthorize instead of @PostAuthorize (at dev time to println API Exception)
+  // org.springframework.security.access.AccessDeniedException: Zugriff verweigert
+  // TODO apply @PreAuthorize instead of @PostAuthorize (at dev time to println API Exception)
   public void requestAllDevices() {
     // only retrieve ALL devices once per session (?)
     // if (devices != null && !devices.isEmpty())

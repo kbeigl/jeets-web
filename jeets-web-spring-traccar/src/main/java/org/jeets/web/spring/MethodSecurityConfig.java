@@ -6,8 +6,8 @@ import org.springframework.security.config.annotation.method.configuration.Globa
 
 /*
  * you could also use annotations in the web configuration
- * 		@EnableGlobalMethodSecurity(prePostEnabled = true)
- * 		@EnableWebSecurity
+ * 	@EnableGlobalMethodSecurity(prePostEnabled = true)
+ * 	@EnableWebSecurity
  * of your Application instead of using this class
  */
 

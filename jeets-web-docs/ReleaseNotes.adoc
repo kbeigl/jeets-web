@@ -3,11 +3,14 @@
 
 = Release Notes - JeeTS Web Repository
 
+
 === 2020 December - v1.0
 
  * Added `jeets-web-vaadin` project as a sample
    starter to create a Traccar Frontend with little code.
    
+ * Introduced Google Code Format/ter 
+ 
 
 === 2020 December - v1.0-beta
 

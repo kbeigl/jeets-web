@@ -141,6 +141,11 @@
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>
+			<plugin>
+				<groupId>com.coveo</groupId>
+				<artifactId>fmt-maven-plugin</artifactId>
+			</plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -151,7 +156,6 @@
                     <maxAttempts>240</maxAttempts>
                 </configuration>
             </plugin>
-
             <!--
                 Take care of synchronizing java dependencies and 
                 imports in package.json and main.js files.
